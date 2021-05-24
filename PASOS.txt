@@ -6,6 +6,7 @@
 ------proyecto de API de fastify y Primas ORM con JWT-Token -------------
 ------ registro de usuarios con roles y  rutas protegidas API ----------- 
  ------ Hasta aqui hicimos el proyecto y lo subimos a gitHub -------------
+ marino el mejor
  
  lo que sigue:
 6. crear las funciones de verificacion para los Roles y perminos -----
