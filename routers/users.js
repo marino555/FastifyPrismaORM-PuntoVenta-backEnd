@@ -1,4 +1,5 @@
-
+// las funciones f.getUser y demas vienen de la carpeta schema y las segundas funciones de f.verUser vienen de la carpeta controllers
+// decoramos el objeto de fastify para tener mayor rapidez
 function Users(fastify, options, done) {
   const f = fastify
     
