@@ -1,0 +1,8 @@
+node_modules/*
+.env
+controllers/index.js
+prisma/dev.db
+plugin/index.js
+prisma/migrations/migration_lock.toml
+prisma/migrations/20210523045420_estado_activo_defaul/migration.sql
+models/users.model.js

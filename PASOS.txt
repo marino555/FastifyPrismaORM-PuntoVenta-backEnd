@@ -1,0 +1,11 @@
+1. crear el modulo de user con prisma y fastify
+2. crear los schema y las funciones y rutas de crear los users
+3. quede en actual y borrar user!!
+4. crear y devolver los JWT-Token en el login
+5. rutas protegidas y JWT-Token y decodificar el token
+------proyecto de API de fastify y Primas ORM con JWT-Token -------------
+------ registro de usuarios con roles y  rutas protegidas API ----------- 
+ ------ Hasta aqui hicimos el proyecto y lo subimos a gitHub -------------
+ 
+ lo que sigue:
+6. crear las funciones de verificacion para los Roles y perminos -----
