@@ -6,3 +6,5 @@ plugin/index.js
 prisma/migrations/migration_lock.toml
 prisma/migrations/20210523045420_estado_activo_defaul/migration.sql
 models/users.model.js
+prisma/dev.db-journal
+prisma/migrations/20210526133721_nuevo_punto/migration.sql
