@@ -10,3 +10,11 @@
  
  lo que sigue:
 6. crear las funciones de verificacion para los Roles y perminos -----
+// para tener mar seguridad deberiamos buscar en la base de datos al user y comprar sus roles y sus estados,
+// pero no lo hacemos por que eso consume recurso y tiempo en la base de datos
+
+7. crear el modulo de categoria
+8. crear el modulo de subcategorias
+9. crear el modulo de articulos
+10. crear el modulo de los profile
+11. crear el modulo para subir imagenes, tanto para aticulos y los userProfile

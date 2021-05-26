@@ -8,6 +8,9 @@ function Users(fastify, options, done) {
     f.post('/user/', f.postUser, f.crearUser)
     f.put('/user/', f.putUser, f.actualUser)
     f.delete('/user/:id', f.delUser, f.borrarUser)
+    
+    f.put('/user/activo', f.putUserActivo, f.estadoActivo)
+    f.put('/user/desactivo', f.putUserDesactivo, f.estadoDesactivo)
 
     f.post('/login/', f.postLogin, f.login)
     f.get('/protejida/', f.userRestringido, f.protejida)

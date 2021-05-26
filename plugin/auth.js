@@ -38,6 +38,7 @@ async function authCool(fastify, options, next) {
       todo.nombre = user.nombre;
       todo.role = user.role;
       todo.email = user.email;
+      todo.estado = user.estado;
 
       const token = await fastify.jwt.sign(todo); // aqui generamos el token
       const tokenCool = `Bearer ${token}`

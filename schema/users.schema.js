@@ -4,7 +4,7 @@ const fp = require("fastify-plugin");
 
 async function decoraUser(fastify, options, next) {
 
-  const { verifyExistingUser, verifyToken } = fastify
+  const { verifyExistingUser, verifyToken, verifySuperAdmin, verifyAdmin } = fastify
 
   const schemaGetUser = {
     ...getUser, 
@@ -16,17 +16,23 @@ async function decoraUser(fastify, options, next) {
     }
   const schemaPutUser = {
     ...putUser, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifysuperAdmin],{relation: "and"}) 
+    preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"}) 
     }
   const schemaDelUser = {
     ...delUser, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifysuperAdmin],{relation: "and"}) 
+    preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"}) 
+    } 
+
+const schemaputUserActivo = {
+    ...putUserActivo, 
+    preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"}) 
     }  
-/* const schemaPutUserEstado = {
-    ...putUserEstado, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifysuperAdmin],{relation: "and"}) 
+
+const schemaputUserDesactivo = {
+    ...putUserDesactivo, 
+   preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"}) 
     }  
- */
+
 // const schemaUserImagen = {
 //     ...userImagen, 
 //     preValidation: fastify.auth([fastify.registrado, fastify.verifysuperAdmin],{relation: "or"}),
@@ -35,7 +41,7 @@ async function decoraUser(fastify, options, next) {
 const schemaRestringido = {
     ...userRestringido, 
     // preValidation: fastify.auth([fastify.verifyToken]),
-     preHandler: fastify.auth([verifyToken])
+     preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})
     }  
 
     fastify.decorate('getUsers', getUsers )
@@ -43,7 +49,9 @@ const schemaRestringido = {
     fastify.decorate('postUser', schemaPosUser )
     fastify.decorate('putUser', schemaPutUser )
     fastify.decorate('delUser', schemaDelUser )
-    /* fastify.decorate('putUserEstado', schemaPutUserEstado ) */
+    fastify.decorate('putUserActivo', schemaputUserActivo )
+    fastify.decorate('putUserDesactivo', schemaputUserDesactivo )
+
     fastify.decorate('postLogin', postLogin )
     fastify.decorate('userRestringido', schemaRestringido )
     
@@ -203,25 +211,25 @@ const delUser = {
     },
   },
 };
-/* const putUserEstado = {
+const putUserActivo = {
   schema: {
     tags: ["Users"],
     description: "actualizar el estado de una sola User",
     ...seguridad,
     body: {
-      required: ["_id"],
+      required: ["id"],
       additionalProperties: false,
       type: "object",
       properties: {
-        _id: { type: "string", description: 'el ID es necesario para actualizar el estado de una User' },
-        estado: { type: "number", enum: [ 1, 0], description: 'el estado solo puede ser 1 o 0' },
+        id: { type: "string", description: 'el ID es necesario para actualizar el estado de una User' },
+        estado: { type: "number", enum: [1], default: 1, description: 'el estado solo puede ser 1 o 0' },
       },
     },
     response: {
       200: {
         type: "object",
         properties: {
-          _id: { type: "string" },
+          id: { type: "string" },
           nombre: { type: "string" },
           estado: { type: "number" },
           updated_at: { type: "string" },
@@ -230,7 +238,34 @@ const delUser = {
     },
   },
 };
- */
+const putUserDesactivo = {
+  schema: {
+    tags: ["Users"],
+    description: "actualizar el estado a desactivado",
+    ...seguridad,
+    body: {
+      required: ["id"],
+      additionalProperties: false,
+      type: "object",
+      properties: {
+        id: { type: "string", description: 'el ID es necesario para actualizar el estado de una User' },
+        estado: { type: "number", enum: [0], default: 0 ,description: 'el estado solo puede ser 1 o 0' },
+      },
+    },
+    response: {
+      200: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          nombre: { type: "string" },
+          estado: { type: "number" },
+          updated_at: { type: "string" },
+        },
+      },
+    },
+  },
+};
+
 const postLogin = {
   schema: {
     tags: ["Users"],

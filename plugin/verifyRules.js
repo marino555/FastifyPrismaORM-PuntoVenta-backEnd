@@ -32,6 +32,58 @@ async function verifyCool(fastify, options, next) {
       reply.status(500).send({err, error: "paso un percanse y no podemos continuar con la busqueda del user en la base de datos"})
     }
   })
+// verificamos todos los roles ==============================================
+// para tener mar seguridad deberiamos buscar en la base de datos al user y comprar sus roles y sus estados,
+// pero no lo hacemos por que eso consume recurso y tiempo en la base de datos
+
+  .decorate("verifyTodoRoles", async function(request, reply) {
+
+    console.log("estoy en flujo todos")
+    console.log(request.user)
+    const { role } = request.user
+    const { estado } = request.user
+
+    if (estado === 0) { return reply.status(403).send({ message: 'Este User NO esta Activado' }) };
+    if (role =='ADMIN' || role == 'VENTOR' || role =='SUPERADMIN') { return }
+    else { return reply.status(403).send({ message: 'No autorizado no TIENES ROLE' }) };
+
+  })
+ .decorate("verifySuperAdmin", async function(request, reply) {
+
+    console.log("estoy en flujo SUPERADMIN")
+    console.log(request.user)
+    const { role } = request.user
+    const { estado } = request.user
+
+    if (estado === 0) { return reply.status(403).send({ message: 'Este User NO esta Activado' }) };
+    if (role !== 'SUPERADMIN') { return reply.status(403).send({ message: 'No autorizado no es SUPERADMIN' }) };
+      
+     
+  })
+  .decorate("verifyAdmin", async function(request, reply) {
+
+    console.log("estoy en flujo ADMIN")
+      console.log(request.user)
+      const { role } = request.user
+      const { estado } = request.user
+  
+      if (estado === 0) { return reply.status(403).send({ message: 'Este User NO esta Activado' }) };
+      if (role == 'ADMIN' || role == 'SUPERADMIN') { return }
+      else { return reply.status(403).send({ message: 'No autorizado no es ADMIN' }) };
+
+  })
+  .decorate("verifyVentor", async function(request, reply) {
+
+    console.log("estoy en flujo VENTOR")
+    console.log(request.user)
+    const { role } = request.user
+    const { estado } = request.user
+
+    if (estado === 0) { return reply.status(403).send({ message: 'Este User NO esta Activado' }) };
+    if (role =='VENTOR' || role =='SUPERADMIN') { return }
+    else { return reply.status(403).send({ message: 'No autorizado no es VENTOR' }) };
+
+  })
 
 
   next();

@@ -36,7 +36,7 @@ async function UsersCool(fastify, options, next) {
       }
     })
     .decorate('actualUser', async (request, reply) => {
-      // console.log(request.body)
+       console.log(request.body)
       const data = request.body
       let { id } = data
       
@@ -64,6 +64,46 @@ async function UsersCool(fastify, options, next) {
       } catch (error) {
         console.log("no pudimos actualizar el user", error)
         return reply.status(500).send({error: "no pudimos actualizar el user"})
+      }
+    })
+    .decorate('estadoActivo', async (request, reply) => {
+     //  console.log(request.body)
+       const { id } = request.body
+      
+      try {
+        // const result = await Models.User.findByIdAndUpdate({ _id },{ ...data },{ new: true})
+        const result = await PUser.update({
+          where: { id: String(id) },
+          data :{ 
+            estado: 1
+          }
+        })
+        // console.log(result)
+        return result
+        
+      } catch (error) {
+        console.log("no pudimos actualizar el estado de user", error)
+        return reply.status(500).send({error: "no pudimos actualizar el estado de user"})
+      }
+    })
+    .decorate('estadoDesactivo', async (request, reply) => {
+      // console.log(request.body)
+        const { id } = request.body
+      
+      try {
+        // const result = await Models.User.findByIdAndUpdate({ _id },{ ...data },{ new: true})
+        const result = await PUser.update({
+          where: { id: String(id) },
+          data :{ 
+            estado: 0
+          }
+        })
+        // console.log(result)
+        return result
+        
+      } catch (error) {
+        console.log("no pudimos actualizar el estado de user", error)
+        return reply.status(500).send({error: "no pudimos actualizar el estado de user"})
       }
     })
     .decorate('borrarUser', async (request, reply) => {
