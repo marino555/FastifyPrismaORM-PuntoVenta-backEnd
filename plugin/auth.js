@@ -9,12 +9,13 @@ async function authCool(fastify, options, next) {
   });
 
   const { bcrypt, prisma } = fastify;
-
+  const PUser = fastify.prisma.users // ya con el cliente de prisma decorado, lo usamos con el modelo user de la migracion ya creada
+  
   fastify
     .decorate("verificarUser", async (userCool, reply) => {
       const { email, pass } = userCool;
 // si estado es 1 el user esta activo.... pero si es 0 esta inactivo y no se va a encontrar
-      const user = await prisma.user.findFirst({ 
+      const user = await PUser.findFirst({ 
         where: {
           email: {
             contains: email,

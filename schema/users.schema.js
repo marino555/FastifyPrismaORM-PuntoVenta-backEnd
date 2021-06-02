@@ -12,7 +12,7 @@ async function decoraUser(fastify, options, next) {
   }
   const schemaPosUser = {
     ...postUser, 
-    preHandler: fastify.auth([verifyExistingUser]) 
+   // preHandler: fastify.auth([verifyExistingUser]) 
     }
   const schemaPutUser = {
     ...putUser, 
@@ -66,7 +66,7 @@ module.exports = fp(decoraUser);
 const resCool = {
     type: "object",
     properties: {
-      id: { type: "string" },
+      id: { type: "number" },
       role: { type: "string" },
       nombre: { type:"string"},
       email: { type:"string"},
@@ -121,8 +121,7 @@ const getUser = {
       required: ["id"],
       properties: {
         id: {
-          type: 'string',
-          minLength: 10,
+          type: 'number',
           description: 'el ID es necesario para buscar un unico User'
         }
       }
@@ -170,7 +169,7 @@ const putUser = {
       additionalProperties: false,
       required: ["id"],
       properties: {
-        id: { type: "string" },
+        id: { type: "number" },
         role: { type: "string", maxlength:30, enum: ["VENTOR","ADMIN", "SUPERADMIN"]},
         nombre: { type:"string", maxLength: 50},
         email: { type:"string", maxlength:50},
@@ -197,7 +196,7 @@ const delUser = {
       type: 'object',
       required: ["id"],
       properties: {
-        id: { type: 'string', minLength: 10, description: 'el ID es necesario para Borrar una unica User' }
+        id: { type: 'number', minLength: 10, description: 'el ID es necesario para Borrar una unica User' }
       }
     },
     response: {
@@ -221,7 +220,7 @@ const putUserActivo = {
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "string", description: 'el ID es necesario para actualizar el estado de una User' },
+        id: { type: "number", description: 'el ID es necesario para actualizar el estado de una User' },
         estado: { type: "number", enum: [1], default: 1, description: 'el estado solo puede ser 1 o 0' },
       },
     },
@@ -229,7 +228,7 @@ const putUserActivo = {
       200: {
         type: "object",
         properties: {
-          id: { type: "string" },
+          id: { type: "number" },
           nombre: { type: "string" },
           estado: { type: "number" },
           updated_at: { type: "string" },
@@ -248,7 +247,7 @@ const putUserDesactivo = {
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "string", description: 'el ID es necesario para actualizar el estado de una User' },
+        id: { type: "number", description: 'el ID es necesario para actualizar el estado de una User' },
         estado: { type: "number", enum: [0], default: 0 ,description: 'el estado solo puede ser 1 o 0' },
       },
     },
@@ -256,7 +255,7 @@ const putUserDesactivo = {
       200: {
         type: "object",
         properties: {
-          id: { type: "string" },
+          id: { type: "number" },
           nombre: { type: "string" },
           estado: { type: "number" },
           updated_at: { type: "string" },

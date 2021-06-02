@@ -7,8 +7,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id        String      @id @default(uuid())
+model Users {
+  id        Int         @id @default(autoincrement())
   nombre    String
   email     String      @unique
   pass      String
@@ -16,16 +16,19 @@ model User {
   estado    Int         @default(1)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @default(now()) @updatedAt
-  Categoria Categoria[]
+  Categoria Categorias[]
+
 }
 
-model Categoria {
+model Categorias {
   id          Int      @id @default(autoincrement())
+  parentId    Int      @default(0)
   nombre      String
   descripcion String?
   estado      Int      @default(1)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
+  user        Users     @relation(fields: [userId], references: [id])
+  userId      Int
+
 }

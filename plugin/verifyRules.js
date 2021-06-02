@@ -2,8 +2,8 @@ const fp = require("fastify-plugin");
 
 async function verifyCool(fastify, options, next) {
  
-  const { prisma } = fastify;
-
+ 
+  const PUser = fastify.prisma.users // ya con el cliente de prisma decorado, lo usamos con el modelo user de la migracion ya creada
   fastify.decorate("verifyToken", async function(request, reply) {
      
     try {
@@ -22,7 +22,7 @@ async function verifyCool(fastify, options, next) {
      
     try {
       console.log("cool papa verificando user haber si existe");
-     const user = await prisma.user.findUnique({ where: { email } }) 
+     const user = await PUser.findUnique({ where: { email } }) 
      // console.log(user)
       // console.log("marinooo", mas)
       if (user) return reply.status(403).send({ error: "ya el usuario existe en la base de datos"})

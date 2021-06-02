@@ -61,6 +61,8 @@ const Rescat = {
   createdAt: { type: "string" },
   updatedAt: { type: "string" },
   userId: { type: "string" },
+  parentId: { type: "number" },
+
 }
 
 
@@ -123,6 +125,7 @@ const postCategoria = {
       properties: {
         nombre: { type: "string", maxLength: 50 },
         userId: { type: "string" },
+        parentId: { type: "number" },
         descripcion: {
           type: "string",
           maxLength: 255,
@@ -155,7 +158,9 @@ const putCategoria = {
         nombre: { type: "string", maxLength: 50 },
         descripcion: { type: "string", maxLength: 255 },
         estado: { type: "number", enum: [ 1, 0], description: 'el estado solo puede ser 1 o 0' },
-        userId: { type: "string" }
+        userId: { type: "string" },
+        parentId: { type: "number" },
+
       },
     },
     response: {

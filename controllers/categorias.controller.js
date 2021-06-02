@@ -2,7 +2,7 @@ const fp = require("fastify-plugin");
 
 async function categoriasCool(fastify, options, next) {
     
-    const PCategoria = fastify.prisma.categoria // ya con el cliente de prisma decorado, lo usamos con el modelo Categoria de la migracion ya creada
+    const PCategoria = fastify.prisma.categorias // ya con el cliente de prisma decorado, lo usamos con el modelo Categoria de la migracion ya creada
 
     fastify.decorate('verCategorias', async (request, reply) => {
       try {
@@ -36,7 +36,7 @@ async function categoriasCool(fastify, options, next) {
       console.log(request.body)
       const data = request.body
 
-      const {nombre, descripcion, estado, userId} = data
+      const {nombre, descripcion, estado, userId, parentId} = data
       
       try {
         const todos = await PCategoria.create({  
@@ -44,6 +44,7 @@ async function categoriasCool(fastify, options, next) {
             nombre,
             descripcion,
             estado,
+            parentId,
             userId: userId || undefined, // sets userId of Profile record
           },
         include: {
@@ -71,7 +72,7 @@ async function categoriasCool(fastify, options, next) {
     })
     .decorate('actualCategoria', async (request, reply) => { 
       const data = request.body
-      let { id, nombre, descripcion, estado, userId } = data
+      let { id, nombre, descripcion, estado, userId, parentId } = data
       console.log(data)
       
       const Categoria = await PCategoria.findFirst({
@@ -99,6 +100,7 @@ async function categoriasCool(fastify, options, next) {
             nombre,
             descripcion,
             estado,
+            parentId,
             userId: userId || undefined, // sets userId of Profile record
           },
         include: {

@@ -3,7 +3,7 @@ const fp = require("fastify-plugin");
 
 async function UsersCool(fastify, options, next) {
     
-    const PUser = fastify.prisma.user // ya con el cliente de prisma decorado, lo usamos con el modelo user de la migracion ya creada
+    const PUser = fastify.prisma.users // ya con el cliente de prisma decorado, lo usamos con el modelo user de la migracion ya creada
     const { bcrypt } = fastify
 
     fastify.decorate('verUsers', async (request, reply) => {
@@ -15,7 +15,7 @@ async function UsersCool(fastify, options, next) {
      const { id } = request.params
      if (id.length < 10 ) { return reply.status(500).send({error: "El user ID No es valido"}) }        
      
-     const user = await PUser.findUnique({ where: { id: String(id) } }) 
+     const user = await PUser.findUnique({ where: { id: Number(id) } }) 
      // console.log(user)
      if (user) { return user; }   
      return reply.status(500).send({error: "no se encontro el user en la base de datos"})
@@ -42,7 +42,7 @@ async function UsersCool(fastify, options, next) {
       
       const user = await PUser.findUnique({
         where: {
-          id: String(id),
+          id: Number(id),
         }
       })
       
@@ -55,7 +55,7 @@ async function UsersCool(fastify, options, next) {
       try {
         // const result = await Models.User.findByIdAndUpdate({ _id },{ ...data },{ new: true})
         const result = await PUser.update({
-          where: { id: String(id) },
+          where: { id: Number(id) },
           data
         })
         // console.log(result)
@@ -73,7 +73,7 @@ async function UsersCool(fastify, options, next) {
       try {
         // const result = await Models.User.findByIdAndUpdate({ _id },{ ...data },{ new: true})
         const result = await PUser.update({
-          where: { id: String(id) },
+          where: { id: Number(id) },
           data :{ 
             estado: 1
           }
@@ -93,7 +93,7 @@ async function UsersCool(fastify, options, next) {
       try {
         // const result = await Models.User.findByIdAndUpdate({ _id },{ ...data },{ new: true})
         const result = await PUser.update({
-          where: { id: String(id) },
+          where: { id: Number(id) },
           data :{ 
             estado: 0
           }
@@ -112,12 +112,12 @@ async function UsersCool(fastify, options, next) {
       
       if (id.length < 10 ) { return reply.status(500).send({error: "El user ID No es valido para Borrarlo"}) }
       
-      const user = await PUser.findUnique({ where: { id: String(id) } })
+      const user = await PUser.findUnique({ where: { id: Number(id) } })
       
       if (!user) { return reply.status(500).send({error: "El user No existe para Borrarlo"}) }
       
       try {
-        const result = await PUser.delete({ where: { id: String(id) }  })
+        const result = await PUser.delete({ where: { id: Number(id) }  })
         // console.log(result)
         return { borrado: true, nombre: result.nombre }
         
