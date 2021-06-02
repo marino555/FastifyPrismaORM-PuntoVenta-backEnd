@@ -7,7 +7,14 @@ async function UsersCool(fastify, options, next) {
     const { bcrypt } = fastify
 
     fastify.decorate('verUsers', async (request, reply) => {
-        const todos = await PUser.findMany();
+      const { consulta } = request.query
+        const todos = await PUser.findMany({
+          where: {
+          nombre: {
+            contains: consulta,
+          },
+        },
+      });
        return todos;
    })
    .decorate('verUser', async (request, reply) => {

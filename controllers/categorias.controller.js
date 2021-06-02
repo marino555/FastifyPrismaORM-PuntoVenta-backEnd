@@ -5,9 +5,19 @@ async function categoriasCool(fastify, options, next) {
     const PCategoria = fastify.prisma.categorias // ya con el cliente de prisma decorado, lo usamos con el modelo Categoria de la migracion ya creada
 
     fastify.decorate('verCategorias', async (request, reply) => {
+
+        console.log(request.query)
+       const { consulta } = request.query
+
       try {
-        const todos = await PCategoria.findMany();
-        console.log(todos)
+        const todos = await PCategoria.findMany({
+          where: {
+          nombre: {
+            contains: consulta,
+          },
+        },
+      });
+        // console.log(todos)
        return todos;
         
       } catch (err) {
