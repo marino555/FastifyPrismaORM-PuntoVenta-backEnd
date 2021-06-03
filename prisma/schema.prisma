@@ -17,7 +17,7 @@ model Users {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @default(now()) @updatedAt
   Categoria Categorias[]
-
+  Articulos Articulos[]
 }
 
 model Categorias {
@@ -32,4 +32,23 @@ model Categorias {
   subcategori  Categorias[] @relation("categoriasCool")
   Categorias   Categorias?  @relation("categoriasCool", fields: [categoriasId], references: [id])
   categoriasId Int?
+  Articulos    Articulos[]
+}
+
+model Articulos {
+  id            Int        @id @default(autoincrement())
+  nombre        String
+  descripcion   String?
+  estado        Int        @default(1)
+  codigo        String
+  precio_venta  Int        @default(0)
+  precio_compra Int        @default(0)
+  stock         Int        @default(10)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now()) @updatedAt
+  user          Users      @relation(fields: [userId], references: [id])
+  userId        Int
+  categoria     Categorias @relation(fields: [catId], references: [id])
+  catId         Int
+
 }

@@ -1,6 +1,6 @@
 // las funciones f.getUser y demas vienen de la carpeta schema y las segundas funciones de f.verUser vienen de la carpeta controllers
 // decoramos el objeto de fastify para tener mayor rapidez
-function Users(fastify, options, done) {
+function Categorias(fastify, options, done) {
   const f = fastify
     
   f.get('/categorias', f.getCategorias, f.verCategorias)
@@ -16,4 +16,4 @@ function Users(fastify, options, done) {
     done()
   }
   
-  module.exports = Users
+  module.exports = Categorias

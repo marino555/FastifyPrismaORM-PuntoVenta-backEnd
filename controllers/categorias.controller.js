@@ -33,7 +33,7 @@ async function categoriasCool(fastify, options, next) {
      try {
        const Categoria = await PCategoria.findUnique({ 
          where: { id: Number(id) }, 
-         include: { user: true, subcategori: true },  
+         include: { user: true, subcategori: true, Articulos: true },  
             }) 
         console.log(Categoria)
        if (Categoria) { return Categoria; }   
