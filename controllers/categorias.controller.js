@@ -12,12 +12,13 @@ async function categoriasCool(fastify, options, next) {
       try {
         const todos = await PCategoria.findMany({
           where: {
-          nombre: {
-            contains: consulta,
-          },
-        },
+                nombre: {
+                  contains: consulta,
+                },
+              },
+        include: { subcategori: true },  
       });
-        // console.log(todos)
+         console.log(todos)
        return todos;
         
       } catch (err) {
@@ -32,7 +33,7 @@ async function categoriasCool(fastify, options, next) {
      try {
        const Categoria = await PCategoria.findUnique({ 
          where: { id: Number(id) }, 
-         include: { user: true, },  
+         include: { user: true, subcategori: true },  
             }) 
         console.log(Categoria)
        if (Categoria) { return Categoria; }   
@@ -46,7 +47,7 @@ async function categoriasCool(fastify, options, next) {
       console.log(request.body)
       const data = request.body
 
-      const {nombre, descripcion, estado, userId, parentId} = data
+      const {nombre, descripcion, estado, userId, catId} = data
       
       try {
         const todos = await PCategoria.create({  
@@ -54,11 +55,12 @@ async function categoriasCool(fastify, options, next) {
             nombre,
             descripcion,
             estado,
-            parentId,
             userId: userId || undefined, // sets userId of Profile record
+            categoriasId: catId
           },
         include: {
           user: true, // Include all posts in the returned object
+          subcategori: true
         }, 
       })
    /*      const todos = await PCategoria.update({   este codigo funciona================
@@ -82,7 +84,7 @@ async function categoriasCool(fastify, options, next) {
     })
     .decorate('actualCategoria', async (request, reply) => { 
       const data = request.body
-      let { id, nombre, descripcion, estado, userId, parentId } = data
+      let { id, nombre, descripcion, estado, userId, catId } = data
       console.log(data)
       
       const Categoria = await PCategoria.findFirst({
@@ -110,11 +112,12 @@ async function categoriasCool(fastify, options, next) {
             nombre,
             descripcion,
             estado,
-            parentId,
             userId: userId || undefined, // sets userId of Profile record
+            categoriasId: catId
           },
         include: {
           user: true, // Include all posts in the returned object
+          subcategori: true
         } 
         })
          console.log("actualizado", result)

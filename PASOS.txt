@@ -14,7 +14,7 @@
 // pero no lo hacemos por que eso consume recurso y tiempo en la base de datos
 
 7. crear el modulo de categoria ----- el bug que tenemos en categoria hasta ahora es que se puede repetir el nombre de la misma categoria
-8. crear el modulo de subcategorias --------
-9. crear el modulo de articulos
+8. crear el modulo de subcategorias ---------- el truco esta en mandarle la categoriasId y manejar solo este campo para actualizar y crear cada categoria individual
+9. crear el modulo de articulos --- vamso por aqui
 10. crear el modulo de los profile
 11. crear el modulo para subir imagenes, tanto para aticulos y los userProfile 

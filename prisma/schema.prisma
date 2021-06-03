@@ -8,27 +8,28 @@ generator client {
 }
 
 model Users {
-  id        Int         @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   nombre    String
-  email     String      @unique
+  email     String       @unique
   pass      String
-  role      String      @default("VENTOR")
-  estado    Int         @default(1)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @default(now()) @updatedAt
+  role      String       @default("VENTOR")
+  estado    Int          @default(1)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now()) @updatedAt
   Categoria Categorias[]
 
 }
 
 model Categorias {
-  id          Int      @id @default(autoincrement())
-  parentId    Int      @default(0)
-  nombre      String
-  descripcion String?
-  estado      Int      @default(1)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  user        Users     @relation(fields: [userId], references: [id])
-  userId      Int
-
+  id           Int          @id @default(autoincrement())
+  nombre       String
+  descripcion  String?
+  estado       Int          @default(1)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now()) @updatedAt
+  user         Users        @relation(fields: [userId], references: [id])
+  userId       Int
+  subcategori  Categorias[] @relation("categoriasCool")
+  Categorias   Categorias?  @relation("categoriasCool", fields: [categoriasId], references: [id])
+  categoriasId Int?
 }
