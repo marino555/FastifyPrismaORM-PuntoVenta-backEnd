@@ -37,6 +37,9 @@ async function ArticulosCool(fastify, options, next) {
             }) 
         console.log(Articulo)
        if (Articulo) { return Articulo; }   
+
+       return reply.status(500).send({error: "no se encontro el Articulo en la base de datos"})
+       
       } catch (err) {
         
          console.log(err)

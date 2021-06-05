@@ -15,6 +15,9 @@
 
 7. crear el modulo de categoria ----- el bug que tenemos en categoria hasta ahora es que se puede repetir el nombre de la misma categoria
 8. crear el modulo de subcategorias ---------- el truco esta en mandarle la categoriasId y manejar solo este campo para actualizar y crear cada categoria individual
-9. crear el modulo de articulos --- vamso por aqui
-10. crear el modulo de los profile
-11. crear el modulo para subir imagenes, tanto para aticulos y los userProfile 
+9. crear el modulo de articulos --- completado
+====== vamos por aqui
+10. crear el modulo de las personas --- donde definimos si una persona sera cliente o proveedor para venderle, aqui haremos la base de datos de nuestros clientes
+======== quedamos en persona controller... modificando las funciones de las personas y ahora solo nos falta testear todas las rutas
+11. crear la tabla perfiles que se anexara a la tabla clientes
+12. crear el modulo para subir imagenes, tanto para aticulos y los userProfile 

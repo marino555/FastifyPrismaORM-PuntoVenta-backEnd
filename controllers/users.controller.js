@@ -19,8 +19,7 @@ async function UsersCool(fastify, options, next) {
    })
    .decorate('verUser', async (request, reply) => {
      //console.log("ver el id de ruta", request.params)
-     const { id } = request.params
-     if (id.length < 10 ) { return reply.status(500).send({error: "El user ID No es valido"}) }        
+     const { id } = request.params      
      
      const user = await PUser.findUnique({ where: { id: Number(id) } }) 
      // console.log(user)

@@ -36,7 +36,10 @@ async function categoriasCool(fastify, options, next) {
          include: { user: true, subcategori: true, Articulos: true },  
             }) 
         console.log(Categoria)
-       if (Categoria) { return Categoria; }   
+       if (Categoria) { return Categoria; }    
+
+       return reply.status(500).send({error: "no se encontro la Categoria en la base de datos"})
+       
       } catch (err) {
         
          console.log(err)

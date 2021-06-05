@@ -18,6 +18,7 @@ model Users {
   updatedAt DateTime     @default(now()) @updatedAt
   Categoria Categorias[]
   Articulos Articulos[]
+  Personas  Personas[]
 }
 
 model Categorias {
@@ -50,5 +51,22 @@ model Articulos {
   userId        Int
   categoria     Categorias @relation(fields: [catId], references: [id])
   catId         Int
+
+}
+
+model Personas {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  email          String   @unique
+  estado         Int      @default(1)
+  tipo_persona   String   @default("CLIENTE")
+  tipo_documento String   @default("CEDULA")
+  num_documento  String?
+  direccion      String?
+  telefono       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+  user           Users    @relation(fields: [userId], references: [id])
+  userId         Int
 
 }

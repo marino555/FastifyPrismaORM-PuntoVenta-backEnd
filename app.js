@@ -24,11 +24,13 @@ fastify.register(require("./plugin/verifyRules"));
 fastify.register(require("./schema/users.schema"))
 fastify.register(require("./schema/categorias.schema"))
 fastify.register(require("./schema/articulos.schema"))
+fastify.register(require("./schema/personas.schema"))
 
 // controladores
 fastify.register(require("./controllers/users.controller"))
 fastify.register(require("./controllers/categorias.controller"))
 fastify.register(require("./controllers/articulos.controller"))
+fastify.register(require("./controllers/personas.controller"))
 
       .after(() => {
         //rutas
