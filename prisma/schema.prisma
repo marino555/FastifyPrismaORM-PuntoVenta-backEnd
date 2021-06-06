@@ -93,15 +93,12 @@ model Ingresos {
 }
 
 model DetalleIngeso {
-  id                Int      @id @default(autoincrement())
-  tipo_comprobante  String?
-  serie_comprobante String?
-  num_comprobante   String?
-  impuesto          Int?
-  total             Int
-  estado            Int      @default(1)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now()) @updatedAt
+  id        Int      @id @default(autoincrement())
+  precio    Int?
+  cantidad  Int
+  estado    Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   articulo   Articulos @relation(fields: [articuloId], references: [id])
   articuloId Int
