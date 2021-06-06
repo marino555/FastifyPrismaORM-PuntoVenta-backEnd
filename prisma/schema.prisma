@@ -19,6 +19,7 @@ model Users {
   Categoria Categorias[]
   Articulos Articulos[]
   Personas  Personas[]
+  Ingresos  Ingresos[]
 }
 
 model Categorias {
@@ -37,36 +38,73 @@ model Categorias {
 }
 
 model Articulos {
-  id            Int        @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
   nombre        String
   descripcion   String?
-  estado        Int        @default(1)
+  estado        Int             @default(1)
   codigo        String
-  precio_venta  Int        @default(0)
-  precio_compra Int        @default(0)
-  stock         Int        @default(10)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now()) @updatedAt
-  user          Users      @relation(fields: [userId], references: [id])
+  precio_venta  Int             @default(0)
+  precio_compra Int             @default(0)
+  stock         Int             @default(10)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  user          Users           @relation(fields: [userId], references: [id])
   userId        Int
-  categoria     Categorias @relation(fields: [catId], references: [id])
+  categoria     Categorias      @relation(fields: [catId], references: [id])
   catId         Int
+  DetalleIngeso DetalleIngeso[]
 
 }
 
 model Personas {
-  id             Int      @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   nombre         String
-  email          String   @unique
-  estado         Int      @default(1)
-  tipo_persona   String   @default("CLIENTE")
-  tipo_documento String   @default("CEDULA")
+  email          String     @unique
+  estado         Int        @default(1)
+  tipo_persona   String     @default("CLIENTE")
+  tipo_documento String     @default("CEDULA")
   num_documento  String?
   direccion      String?
   telefono       String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
-  user           Users    @relation(fields: [userId], references: [id])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now()) @updatedAt
+  user           Users      @relation(fields: [userId], references: [id])
   userId         Int
+  Ingresos       Ingresos[]
 
+}
+
+model Ingresos {
+  id                Int      @id @default(autoincrement())
+  tipo_comprobante  String?
+  serie_comprobante String?
+  num_comprobante   String?
+  impuesto          Int?
+  total             Int
+  estado            Int      @default(1)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  user          Users           @relation(fields: [userId], references: [id])
+  userId        Int
+  persona       Personas        @relation(fields: [personaId], references: [id])
+  personaId     Int
+  DetalleIngeso DetalleIngeso[]
+}
+
+model DetalleIngeso {
+  id                Int      @id @default(autoincrement())
+  tipo_comprobante  String?
+  serie_comprobante String?
+  num_comprobante   String?
+  impuesto          Int?
+  total             Int
+  estado            Int      @default(1)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  articulo   Articulos @relation(fields: [articuloId], references: [id])
+  articuloId Int
+  Ingreso    Ingresos  @relation(fields: [ingresoId], references: [id])
+  ingresoId  Int
 }
