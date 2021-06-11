@@ -1,0 +1,19 @@
+{
+  "tipo_comprobante": "Fiscal",
+  "serie_comprobante": "0023",
+  "num_comprobante": "0012",
+  "impuesto": 10,
+  "total": 250,
+  "estado": 1,
+
+  "userId": 1,
+  "personaId": 2,
+  "DetalleIngeso": [
+    {
+      "articuloId": 1,
+      "cantidad": 2,
+      "precio": 30,
+      "estado": 1
+    }
+  ]
+}

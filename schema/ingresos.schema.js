@@ -1,48 +1,95 @@
 const fp = require("fastify-plugin");
 
-async function IngresosCool(fastify, options, next) {
+async function decoraIngeso(fastify, options, next) {
 
-  const schemagetIngresos = {
-    ...getIngresos, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "or"}) 
+  const squemagetIngresos = {
+    ...getIngresos,  
+   // preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
   }
-  const schemagetIngreso = {
+  const squemagetIngreso = {
     ...getIngreso, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "or"}) 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
   }
-  const schemapostIngreso = {
+  const squemapostIngreso = {
     ...postIngreso, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "and"}) 
+   // preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
     }
-  const schemaputIngreso = {
+  const squemaputIngreso = {
     ...putIngreso, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "and"}) 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
     }
-  const schemadelIngreso = {
+  const squemadelIngreso = {
     ...delIngreso, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "and"}) 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
     }  
-const schemaputIngresoActivo = {
+const squemaputIngresoActivo = {
     ...putIngresoActivo, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "and"}) 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
     }  
-const schemaputIngresoDesactivo = {
+const squemaputIngresoDesactivo = {
     ...putIngresoDesactivo, 
-   // preHandler: fastify.auth([fastify.registrado, fastify.verifyAdmin],{relation: "and"}) 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
+    }  
+const squemagetIngresoGrafico = {
+    ...getIngresoGrafico, 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
+    }  
+const squemagetIngresoFecha = {
+    ...getIngresoFecha, 
+  //  preHandler: fastify.auth([verifyToken, verifyAdmin],{relation: "and"})  
     }  
 
-    fastify.decorate('getIngresos', schemagetIngresos )
-    fastify.decorate('getIngreso', schemagetIngreso )
-    fastify.decorate('postIngreso', schemapostIngreso )
-    fastify.decorate('putIngreso', schemaputIngreso )
-    fastify.decorate('delIngreso', schemadelIngreso )
-    fastify.decorate('putIngresoActivo', schemaputIngresoActivo )
-    fastify.decorate('putIngresoDesactivo', schemaputIngresoDesactivo )
+    fastify.decorate('getIngresos', squemagetIngresos )
+    fastify.decorate('getIngreso', squemagetIngreso )
+    fastify.decorate('postIngreso', squemapostIngreso )
+
+    fastify.decorate('getIngresoGrafico', squemagetIngresoGrafico )
+    fastify.decorate('getIngresoFecha', squemagetIngresoFecha )
+    // fastify.decorate('putIngreso', squemaputIngreso )
+    // fastify.decorate('delIngreso', squemadelIngreso )
+    fastify.decorate('putIngresoActivo', squemaputIngresoActivo )
+    fastify.decorate('putIngresoDesactivo', squemaputIngresoDesactivo )
     
 
 next()
 }
-module.exports = fp(IngresosCool);
+module.exports = fp(decoraIngeso);
+
+
+const detaCool = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    articuloId: { type: "number" },
+    cantidad: { type: "number" },
+    precio: { type: "number" },
+    estado: { type: "number" },
+  }
+
+}
+
+
+const resCool = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    tipo_comprobante: { type: "string" },
+    serie_comprobante: { type: "string" },
+    num_comprobante: { type: "string" },
+    impuesto: { type: "number", maxLength: 20 },
+    total: { type: "number", maxLength: 20 },
+    estado: { type: "number" },
+    createdAt: { type: "string" },
+    updated_at: { type: "string" },
+
+    userId: { type: "number" },
+    personaId: { type: "number" },
+    DetalleIngeso: {  
+      type: "array",
+      items: detaCool,
+    },
+  },
+}
 
 
 const seguridad = {
@@ -53,22 +100,6 @@ const seguridad = {
   ],
 };
 
-const ResIngreso = {
-  id: { type: "number" },
-  nombre: { type: "string" },
-  descripcion: { type: "string" },
-  estado: { type: "number" },
-  codigo: { type: "string" },
-  precio_venta: { type: "number" },
-  precio_compra: { type: "number" },
-  stock: { type: "number" },
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-  userId: { type: "number" },
-  catId: { type: "number" },
-
-}
-
 
 const getIngresos = {
   schema: {
@@ -78,24 +109,21 @@ const getIngresos = {
     additionalProperties: false,
     querystring: {
       // required: ['consulta'],
-      consulta: { type: "string" , description: 'introdusca el texto para buscar una Ingreso por el nombre o por la descripcion, si se deja en blanco traera todas las Ingresos' },
+      consulta: { type: "string" , description: 'introdusca el num_comprobante o el serie_comprobante para buscar una Ingreso por el nombre o por la descripcion, si se deja en blanco traera todas las Ingresos' },
     },
     response: {
       200: {
         type: "array",
-        items: {
-          type: "object",
-          properties: ResIngreso
-        },
+        items: resCool
       },
     },
   },
-};
+}
 
 const getIngreso = {
   schema: {
     tags: ["Ingresos"],
-    description: "ver una sola Ingreso masss",
+    description: "ver un solo Ingreso masss",
     ...seguridad,
     // additionalProperties: false,
     // type: "string",
@@ -104,16 +132,13 @@ const getIngreso = {
       required: ["id"],
       properties: {
         id: {
-          type: 'number',
-          description: 'el ID es necesario para buscar una unica Ingreso'
+          type: 'string',
+          description: 'el ID es necesario para buscar un unico Ingreso'
         }
       }
     },
     response: {
-      200: {
-        type: "object",
-        properties: ResIngreso
-      },
+     // 200: resCool
     },
   },
 };
@@ -127,27 +152,24 @@ const postIngreso = {
       type: "object",
       additionalProperties: false,
       properties: {
-        nombre: { type: "string", maxLength: 50 },
-        descripcion: {
-          type: "string",
-          maxLength: 255,
-          default: "el mejor papa",
+        tipo_comprobante: { type: "string" },
+        serie_comprobante: { type: "string" },
+        num_comprobante: { type: "string" },
+        impuesto: { type: "number", maxLength: 64 },
+        total: { type: "number", maxLength: 20 },
+        estado: { type: "number", default: 1 },
+
+        userId: {type: "number" },
+        personaId: { type: "number" },
+        DetalleIngeso: {  
+          type: "array",
+          items: detaCool,
         },
-        estado: { type: "number", default: 1, enum: [ 1, 0], description: 'el estado solo puede ser 1 o 0' },
-        userId: { type: "number" },
-        catId: { type: "number" },
-        codigo: { type: "string" },
-        precio_venta: { type: "number" },
-        precio_compra: { type: "number" },
-        stock: { type: "number" },
       },
-      required: ["nombre"],
+      required: ["userId"],
     },
     response: {
-      200: {
-        type: "object",
-        properties: ResIngreso
-      },
+      200: resCool
     },
   },
 };
@@ -160,26 +182,26 @@ const putIngreso = {
     body: {
       type: "object",
       additionalProperties: false,
-      required: ["id"],
+      required: ["_id"],
       properties: {
         id: { type: "number" },
-        nombre: { type: "string", maxLength: 50 },
-        descripcion: { type: "string", maxLength: 255 },
-        estado: { type: "number", enum: [ 1, 0], description: 'el estado solo puede ser 1 o 0' },
-        userId: { type: "number" },
-        catId: { type: "number" },
-        codigo: { type: "string" },
-        precio_venta: { type: "number" },
-        precio_compra: { type: "number" },
-        stock: { type: "number" },
+        tipo_comprobante: { type: "string" },
+        serie_comprobante: { type: "string" },
+        num_comprobante: { type: "string" },
+        impuesto: { type: "number", maxLength: 64 },
+        total: { type: "number", maxLength: 20 },
+        estado: { type: "number", default: 1 },
 
+        userId: {type: "number" },
+        personaId: { type: "number" },
+        DetalleIngeso: {  
+          type: "array",
+          items: detaCool,
+        },
       },
     },
     response: {
-      200: {
-        type: "object",
-        properties:ResIngreso
-      },
+      200: resCool
     },
   },
 };
@@ -194,7 +216,7 @@ const delIngreso = {
       required: ["id"],
       properties: {
         id: {
-          type: 'number',
+          type: 'string',
           description: 'el ID es necesario para Borrar una unica Ingreso'
         }
       }
@@ -203,32 +225,30 @@ const delIngreso = {
       200: {
         type: "object",
         properties: {
-          borrado: { type: "boolean" },
-          nombre: { type: "string" }
+          estatus: { type: "boolean" },
         },
       },
     },
   },
 };
+
+
 const putIngresoActivo = {
   schema: {
     tags: ["Ingresos"],
     description: "actualizar el estado de una sola Ingreso",
     ...seguridad,
     body: {
-      required: ["id"],
+      required: ["_id"],
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "number", description: 'el ID es necesario para actualizar el estado de una Ingreso' },
-        estado: { type: "number", enum: [1], description: 'el estado solo para activar Ingreso' },
+        id: { type: "string", description: 'el ID es necesario para actualizar el estado del Ingreso' },
+        estado: { type: "number", enum: [ 1], default: 1, description: 'el estado solo puede ser 1' },
       },
     },
     response: {
-      200: {
-        type: "object",
-        properties: ResIngreso
-      },
+      200: resCool
     },
   },
 };
@@ -239,19 +259,55 @@ const putIngresoDesactivo = {
     description: "actualizar el estado de una sola Ingreso",
     ...seguridad,
     body: {
-      required: ["id"],
+      required: ["_id"],
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "number", description: 'el ID es necesario para actualizar el estado de una Ingreso' },
-        estado: { type: "number", enum: [0], description: 'el estado solo para desactivar' },
+        id: { type: "string", description: 'el ID es necesario para actualizar el estado del Ingreso' },
+        estado: { type: "number", enum: [ 0], default: 0, description: 'el estado solo puede ser 0' },
       },
     },
     response: {
-      200: {
-        type: "object",
-        properties: ResIngreso
-      },
+      200: resCool
     },
   },
 };
+
+const getIngresoGrafico = {
+  schema: {
+    tags: ["Ingresos"],
+    description: "ver todos los ingreso, datos para graficos",
+   // ...seguridad,
+    additionalProperties: false,
+    // querystring: {
+    //   // required: ['consulta'],
+    //   consulta: { type: "string" , description: 'introdusca el num_comprobante o el serie_comprobante para buscar una Venta por el nombre o por la descripcion, si se deja en blanco traera todas las Ventas' },
+    // },
+    // response: {
+    //   200: {
+    //     type: "array",
+    //     items: resCool
+    //   },
+    // },
+  },
+}
+
+const getIngresoFecha = { 
+  schema: {
+    tags: ["Ingresos"],
+    description: "ver todos los ingreso por fecha",
+   // ...seguridad,
+    additionalProperties: false,
+    querystring: {
+      // required: ['empiesa'],
+      empiesa: { type: "string" , default: "2000-01-01", description: 'introdusca la fecha de inicio en formato 2021-05-10 (año-mes-dia)' },
+      termina: { type: "string" ,  default: "2200-01-01", description: 'introdusca la fecha de final en formato 2021-05-10 (año-mes-dia)' },
+    },
+    response: {
+      200: {
+        type: "array",
+        items: resCool
+      },
+    },
+  },
+}

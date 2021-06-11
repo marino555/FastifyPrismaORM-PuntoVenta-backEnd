@@ -12,11 +12,16 @@ async function IngresosCool(fastify, options, next) {
       try {
         const todos = await PIngreso.findMany({
           where: {
-                nombre: {
+            num_comprobante: {
                   contains: consulta,
                 },
               },
-        include: { categoria: true },  
+            include: { 
+              user: true,  
+              DetalleIngeso: {
+                include: { articulo: true}
+                    } 
+                  },  
       });
          console.log(todos)
        return todos;
@@ -33,7 +38,12 @@ async function IngresosCool(fastify, options, next) {
      try {
        const Ingreso = await PIngreso.findUnique({ 
          where: { id: Number(id) }, 
-         include: { user: true, categoria: true },  
+         include: { 
+          user: true,  
+          DetalleIngeso: {
+          include: { articulo: true}
+              } 
+            },  
             }) 
         console.log(Ingreso)
        if (Ingreso) { return Ingreso; }   
@@ -50,24 +60,28 @@ async function IngresosCool(fastify, options, next) {
       console.log(request.body)
       const data = request.body
 
-      const {nombre, descripcion, estado, codigo, precio_venta, precio_compra, stock, userId, catId } = data
+      const {tipo_comprobante, serie_comprobante,  num_comprobante,estado, impuesto, total, userId, personaId, DetalleIngeso } = data
       
       try {
         const todos = await PIngreso.create({  
           data: {
-            nombre,
-            descripcion,
+            tipo_comprobante,
+            serie_comprobante,
+            num_comprobante,
             estado,
-            codigo,
-            precio_venta,
-            precio_compra,
-            stock,
-            userId: userId || undefined, // sets userId of Profile record
-            catId: catId
+            impuesto,
+            total,
+            userId, // sets userId of Profile record
+            personaId,
+            DetalleIngeso: {
+              create: DetalleIngeso,
+            },
           },
         include: {
           user: true, // Include all posts in the returned object
-          categoria: true
+          DetalleIngeso: {
+            include: { articulo: true}
+          }
         }, 
       })
    /*      const todos = await PIngreso.update({   este codigo funciona================
@@ -139,7 +153,7 @@ async function IngresosCool(fastify, options, next) {
         return reply.status(500).send({error: "no pudimos actualizar el Ingreso"})
       }
     })
-    .decorate('activoIngreso', async (request, reply) => { // que aqui en Activar Ingreso
+    .decorate('ingresoActivo', async (request, reply) => { // que aqui en Activar Ingreso
      //  console.log(request.body)
        const { id } = request.body
       
@@ -159,7 +173,7 @@ async function IngresosCool(fastify, options, next) {
         return reply.status(500).send({error: "no pudimos actualizar el estado de la Ingreso"})
       }
     })
-    .decorate('desactivoIngreso', async (request, reply) => {
+    .decorate('ingresoDesactivo', async (request, reply) => {
       // console.log(request.body)
         const { id } = request.body
       
