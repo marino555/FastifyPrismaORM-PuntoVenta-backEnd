@@ -110,7 +110,7 @@ async function ArticulosCool(fastify, options, next) {
       })
       
       if (!Articulo) { return reply.status(500).send({error: "La Articulo No existe para Actualizar o esta inactiva"}) }
-     undefined
+      
       try {
         // const result = await Models.Articulo.findByIdAndUpdate({ _id },{ ...data },{ new: true})
         const result = await PArticulo.update({

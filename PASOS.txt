@@ -18,5 +18,5 @@
 9. crear el modulo de articulos --- completado
 10. crear el modulo de las personas que es lo mismo que la parte del perfil de los clientes ---completado
 ==== vamos por aqui =================
-11. crear la parte ingreso productos y de ventas ==== hacer la parte de ingreso primero
+11. crear la parte ingreso productos y de ventas ==== quede en borrar ingresos ======
 12. crear el modulo para subir imagenes, tanto para aticulos y los userProfile 

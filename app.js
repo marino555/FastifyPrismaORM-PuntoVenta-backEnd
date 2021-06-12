@@ -16,6 +16,7 @@ fastify.register(require('fastify-bcrypt'));
 fastify.register(require('./plugin/prisma-fastify'))
 fastify.register(require("./plugin/auth"));
 fastify.register(require("./plugin/verifyRules"));
+fastify.register(require("./plugin/helpers"));
 
 // // models de las bases de datos
 // fastify.register(require("./models/users.model"));

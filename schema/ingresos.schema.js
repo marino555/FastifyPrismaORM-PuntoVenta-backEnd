@@ -236,19 +236,18 @@ const delIngreso = {
 const putIngresoActivo = {
   schema: {
     tags: ["Ingresos"],
-    description: "actualizar el estado de una sola Ingreso",
+    description: "actualizar el estado de un solo Ingreso",
     ...seguridad,
     body: {
-      required: ["_id"],
+      required: ["id"],
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "string", description: 'el ID es necesario para actualizar el estado del Ingreso' },
-        estado: { type: "number", enum: [ 1], default: 1, description: 'el estado solo puede ser 1' },
+        id: { type: "number", description: 'el ID es necesario para actualizar el estado del Ingreso' }
       },
     },
     response: {
-      200: resCool
+      // 200: resCool
     },
   },
 };
@@ -256,19 +255,18 @@ const putIngresoActivo = {
 const putIngresoDesactivo = {
   schema: {
     tags: ["Ingresos"],
-    description: "actualizar el estado de una sola Ingreso",
+    description: "actualizar el estado de un solo Ingreso",
     ...seguridad,
     body: {
-      required: ["_id"],
+      required: ["id"],
       additionalProperties: false,
       type: "object",
       properties: {
-        id: { type: "string", description: 'el ID es necesario para actualizar el estado del Ingreso' },
-        estado: { type: "number", enum: [ 0], default: 0, description: 'el estado solo puede ser 0' },
+        id: { type: "number", description: 'el ID es necesario para actualizar el estado del Ingreso' }
       },
     },
     response: {
-      200: resCool
+      // 200: resCool
     },
   },
 };

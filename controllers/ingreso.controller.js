@@ -3,6 +3,7 @@ const fp = require("fastify-plugin");
 async function IngresosCool(fastify, options, next) {
     
     const PIngreso = fastify.prisma.ingresos // ya con el cliente de prisma decorado, lo usamos con el modelo Ingreso de la migracion ya creada
+    const { aumentarStock, disminuirStock } = fastify
 
     fastify.decorate('verIngresos', async (request, reply) => {
 
@@ -57,7 +58,7 @@ async function IngresosCool(fastify, options, next) {
      }
     })
     .decorate('crearIngreso', async (request, reply) => {
-      console.log(request.body)
+      // console.log(request.body)
       const data = request.body
 
       const {tipo_comprobante, serie_comprobante,  num_comprobante,estado, impuesto, total, userId, personaId, DetalleIngeso } = data
@@ -84,17 +85,17 @@ async function IngresosCool(fastify, options, next) {
           }
         }, 
       })
-   /*      const todos = await PIngreso.update({   este codigo funciona================
-          where: { ...user },
-          data: {
-            Ingreso: {
-              create: { nombre, descripcion, estado},
-            },
-          },
-        include: {
-          Ingreso: true, // Include all posts in the returned object
-        }, 
-      }) */
+
+      if (todos) {
+        // actualizar o aumentar el stock de cada articulo
+       // console.log("antes de aumentarStock")
+          let detalles = todos.DetalleIngeso;
+          detalles.map(function(x){
+            aumentarStock(x.articuloId,x.cantidad);
+          });
+        
+      }
+ 
          console.log(todos)
         return todos;
         
@@ -154,44 +155,78 @@ async function IngresosCool(fastify, options, next) {
       }
     })
     .decorate('ingresoActivo', async (request, reply) => { // que aqui en Activar Ingreso
-     //  console.log(request.body)
+      // console.log(request.body)
        const { id } = request.body
+
+       const { estado } = await PIngreso.findUnique({  where: { id: Number(id) } }) 
+
+       if (estado == 1) {
+        return reply.send({ingreso: "El ingreso ya esta activo"})
+       }
       
       try {
-        // const result = await Models.Ingreso.findByIdAndUpdate({ _id },{ ...data },{ new: true})
         const result = await PIngreso.update({
           where: { id: Number(id) },
-          data :{ 
+          data: {
             estado: 1
-          }
+          },
+          include: {
+            DetalleIngeso: true
+          }, 
         })
-        // console.log(result)
+
+      //  console.log("actualizado activo", result)
+
+        if (result) {
+          let detalles = result.DetalleIngeso;
+          detalles.map(function(x){
+            aumentarStock(x.articuloId,x.cantidad);
+          });  
+        }
+
         return result
-        
+
       } catch (error) {
-        console.log("no pudimos actualizar el estado de la Ingreso", error)
-        return reply.status(500).send({error: "no pudimos actualizar el estado de la Ingreso"})
+        console.log("no pudimos actualizar el estado de la Ingreso activo", error)
+        return reply.status(500).send({error: "no pudimos actualizar el estado de la Ingreso activo"})
       }
     })
     .decorate('ingresoDesactivo', async (request, reply) => {
-      // console.log(request.body)
-        const { id } = request.body
-      
-      try {
-        // const result = await Models.Ingreso.findByIdAndUpdate({ _id },{ ...data },{ new: true})
-        const result = await PIngreso.update({
-          where: { id: Number(id) },
-          data :{ 
-            estado: 0
-          }
-        })
-        // console.log(result)
-        return result
-        
-      } catch (error) {
-        console.log("no pudimos actualizar el estado de la Ingreso", error)
-        return reply.status(500).send({error: "no pudimos actualizar el estado de la Ingreso"})
+     // console.log(request.body)
+      const { id } = request.body
+
+      const { estado } = await PIngreso.findUnique({  where: { id: Number(id) } }) 
+
+      if (estado == 0) {
+       return reply.send({ingreso: "El ingreso ya esta Desactivo"})
       }
+     
+     try {
+       const result = await PIngreso.update({
+         where: { id: Number(id) },
+         data: {
+           estado: 0
+         },
+         include: {
+          DetalleIngeso: true
+        }, 
+       })
+
+      // console.log("actualizado desactivo", result)
+
+       if (result) {
+         let detalles = result.DetalleIngeso;
+         detalles.map(function(x){
+          disminuirStock(x.articuloId,x.cantidad);
+         });  
+       }
+
+       return result
+
+     } catch (error) {
+       console.log("no pudimos actualizar el estado de la Ingreso desactivo", error)
+       return reply.status(500).send({error: "no pudimos actualizar el estado de el Ingreso desactivo"})
+     }
     })
     .decorate('borrarIngreso', async (request, reply) => {
       // console.log(request.params)
