@@ -62,7 +62,9 @@ async function IngresosCool(fastify, options, next) {
       const data = request.body
 
       const {tipo_comprobante, serie_comprobante,  num_comprobante,estado, impuesto, total, userId, personaId, DetalleIngeso } = data
-      
+      const mes = new Date().getMonth() + 1
+      const ano = new Date().getFullYear()
+      console.log("dato fecha: ", mes, ano)
       try {
         const todos = await PIngreso.create({  
           data: {
@@ -72,6 +74,8 @@ async function IngresosCool(fastify, options, next) {
             estado,
             impuesto,
             total,
+            mes,
+            ano,
             userId, // sets userId of Profile record
             personaId,
             DetalleIngeso: {
@@ -231,20 +235,92 @@ async function IngresosCool(fastify, options, next) {
     .decorate('borrarIngreso', async (request, reply) => {
       // console.log(request.params)
       const { id } = request.params
-      
-      // const Ingreso = await PIngreso.findUnique({ where: { id: Number(id) } })
-     // if (!Ingreso) { return reply.status(500).send({error: "La Ingreso No existe para Borrarlo"}) }
-      
       try {
+        const { estado } = await PIngreso.findUnique({  where: { id: Number(id) } }) 
+        if (estado == 1) { return reply.send({ingreso: "El ingreso debe de estar Desactivo para poderlo borrar"}) }
+         
+        const update = await PIngreso.update({
+          where: { id: Number(id) },
+          data: {
+            DetalleIngeso: {
+              deleteMany: {},
+            },
+          },
+        })
+       // console.log("antes de borrar", update)
         const result = await PIngreso.delete({ where: { id: Number(id) }  })
-        // console.log(result)
-        return { borrado: true, nombre: result.nombre }
+        // console.log("ya borrado", result)
+        return { borrado: true, nombre: result.num_comprobante }
         
       } catch (error) {
         console.log(error)
-        return reply.status(500).send({error: "no se encontro la Ingreso para borrar o hubo un error en la base de datos"})
+        return reply.status(500).send({error: "no se encontro el Ingreso para borrar o hubo un error en la base de datos"})
       }
     })
+    .decorate('graficoIngre12meses', async () => {
+     // console.log("en grafico 12 mese")
+      
+      try {
+       const result = await PIngreso.groupBy({
+          by: ['ano', 'mes'],          
+          _sum: {
+            total: true
+          },
+          _count: {
+            _all: true,
+          },
+          orderBy: [
+            {
+              ano: 'desc',
+            },
+            {
+              mes: 'desc',
+            },
+          ],
+          take: 12,
+        })
+
+     //   console.log("grafico ventas: " + result) 
+
+        return result
+
+    } catch(e){
+           console.log(e)
+        return reply.status(500).send({error: "ocurrio un error con los datos del grafico"})
+     }
+    })
+    .decorate('verFechasIngreso', async (request, respont) => {  // ver todas las Ingreso // para que un campo no aparesca usamos la propiedad .project({ nombre: 0 })
+      // console.log("ver fecha: ", request.query)
+       const { empiesa } = request.query
+       const { termina } = request.query
+
+       const inicio = new Date(empiesa)
+       const fin = new Date(termina)
+      // console.log("ver cool: ", inicio, fin)
+           try {
+            const result = await PIngreso.findMany({
+              where: {
+                AND: [
+                  {  createdAt: { gte: inicio } },
+                  { createdAt: { lte: fin }  }
+                ]
+                    },
+              include: { 
+                user: { select: { id: true, nombre: true, email: true,  role: true,  estado: true }  }, 
+                persona: true, 
+                DetalleIngeso: {
+                include: { articulo: true}
+                    } 
+                  },  
+             })   
+            // console.log("grafico ventas: " + result)     
+             return result
+     
+         } catch(e){
+                console.log(e)
+             return reply.status(500).send({error: "ocurrio un error con los datos del rango de fecha que buscas"})
+          }
+ })
   
     
     next()

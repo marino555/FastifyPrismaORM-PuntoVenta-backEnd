@@ -46,7 +46,7 @@ const squemagetIngresoFecha = {
     fastify.decorate('getIngresoGrafico', squemagetIngresoGrafico )
     fastify.decorate('getIngresoFecha', squemagetIngresoFecha )
     // fastify.decorate('putIngreso', squemaputIngreso )
-    // fastify.decorate('delIngreso', squemadelIngreso )
+    fastify.decorate('delIngreso', squemadelIngreso )
     fastify.decorate('putIngresoActivo', squemaputIngresoActivo )
     fastify.decorate('putIngresoDesactivo', squemaputIngresoDesactivo )
     
@@ -78,9 +78,11 @@ const resCool = {
     num_comprobante: { type: "string" },
     impuesto: { type: "number", maxLength: 20 },
     total: { type: "number", maxLength: 20 },
+    mes: { type: "number", maxLength: 10 },
+    ano: { type: "number", maxLength: 10 },
     estado: { type: "number" },
     createdAt: { type: "string" },
-    updated_at: { type: "string" },
+    updatedAt: { type: "string" },
 
     userId: { type: "number" },
     personaId: { type: "number" },
@@ -216,18 +218,18 @@ const delIngreso = {
       required: ["id"],
       properties: {
         id: {
-          type: 'string',
+          type: 'number',
           description: 'el ID es necesario para Borrar una unica Ingreso'
         }
       }
     },
     response: {
-      200: {
+      /* 200: {
         type: "object",
         properties: {
           estatus: { type: "boolean" },
         },
-      },
+      }, */
     },
   },
 };
@@ -302,10 +304,10 @@ const getIngresoFecha = {
       termina: { type: "string" ,  default: "2200-01-01", description: 'introdusca la fecha de final en formato 2021-05-10 (año-mes-dia)' },
     },
     response: {
-      200: {
+     /*  200: {
         type: "array",
         items: resCool
-      },
+      }, */
     },
   },
 }

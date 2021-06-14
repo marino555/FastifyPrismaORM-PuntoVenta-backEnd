@@ -7,12 +7,12 @@ function Ingresos(fastify, options, done) {
   // rutas unitarias
   f.get('/ingreso/:id', f.getIngreso, f.verIngreso)
   f.post('/ingreso', f.postIngreso, f.crearIngreso)
-  // f.get('/ingresos12meses', f.getIngresoGrafico, f.graficoIngre12meses)
-  // f.get('/ingresosxfechas', f.getIngresoFecha, f.verFechasIngreso)
+   f.get('/ingresos12meses', f.getIngresoGrafico, f.graficoIngre12meses)
+   f.get('/ingresosxfechas', f.getIngresoFecha, f.verFechasIngreso)
 
 
-  /* f.put('/ingreso', f.putIngreso, f.actualIngreso)
-  f.delete('/ingreso/:id', f.delIngreso, f.borrarIngreso) */
+ // f.put('/ingreso', f.putIngreso, f.actualIngreso)
+  f.delete('/ingreso/:id', f.delIngreso, f.borrarIngreso)
 
   f.put('/ingreso/activo', f.putIngresoActivo, f.ingresoActivo)
   f.put('/ingreso/desactivo', f.putIngresoDesactivo, f.ingresoDesactivo)

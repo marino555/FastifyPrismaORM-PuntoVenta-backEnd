@@ -81,6 +81,8 @@ model Ingresos {
   num_comprobante   String?
   impuesto          Int?
   total             Int
+  mes               Int?
+  ano               Int?
   estado            Int      @default(1)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now()) @updatedAt
