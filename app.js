@@ -27,6 +27,7 @@ fastify.register(require("./schema/categorias.schema"))
 fastify.register(require("./schema/articulos.schema"))
 fastify.register(require("./schema/personas.schema"))
 fastify.register(require("./schema/ingresos.schema"))
+fastify.register(require("./schema/ventas.schema"))
 
 // controladores
 fastify.register(require("./controllers/users.controller"))
@@ -34,6 +35,7 @@ fastify.register(require("./controllers/categorias.controller"))
 fastify.register(require("./controllers/articulos.controller"))
 fastify.register(require("./controllers/personas.controller"))
 fastify.register(require("./controllers/ingreso.controller"))
+fastify.register(require("./controllers/ventas.controller"))
 
       .after(() => {
         //rutas

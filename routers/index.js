@@ -5,6 +5,7 @@ module.exports = function(fastify, options, next) {
     fastify.register(require('./articulos'))
     fastify.register(require('./personas'))
     fastify.register(require('./ingresos'))
+    fastify.register(require('./ventas'))
     
     next()
     
