@@ -18,6 +18,7 @@
 9. crear el modulo de articulos --- completado
 10. crear el modulo de las personas que es lo mismo que la parte del perfil de los clientes ---completado
 11. crear la parte ingreso productos y de ventas 
+12. ahora solo falta crear toda la parte de ventas 
+13. crear el modulo para subir imagenes, tanto para aticulos y los userProfile ==== lo dejaremos pendiente
 ==== vamos por aqui =================
-12. ahora solo falta crear toda la parte de ventas ====== verificar que al activar y desactivar las ventas se realize el calculo
-13. crear el modulo para subir imagenes, tanto para aticulos y los userProfile 
+empesar el fronEnd con quasar
