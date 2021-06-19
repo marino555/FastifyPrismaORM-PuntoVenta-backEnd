@@ -251,7 +251,7 @@ async function VentasCool(fastify, options, next) {
        // console.log("antes de borrar", update)
         const result = await PVentas.delete({ where: { id: Number(id) }  })
         // console.log("ya borrado", result)
-        return { borrado: true, nombre: result.num_comprobante }
+        return { borrado: true, nombre: result.tipo_comprobante }
         
       } catch (error) {
         console.log(error)
